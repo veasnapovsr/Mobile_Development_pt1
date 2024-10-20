@@ -5,7 +5,7 @@
 
 class Bankacc {
 
-  //acc = acc
+  //acc = account
   //bal = Balance
 
   int accId;
