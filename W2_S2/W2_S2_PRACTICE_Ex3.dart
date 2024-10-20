@@ -1,51 +1,88 @@
-class MyDuration {
-  final int _milliseconds;
 
-  MyDuration.fromHours(int hours) : _milliseconds = hours * 60 * 60 * 1000;
-  MyDuration.fromMinutes(int minutes) : _milliseconds = minutes * 60 * 1000;
-  MyDuration.fromSeconds(int seconds) : _milliseconds = seconds * 1000;
+class MyDuration {
+
+  //h = hours
+  //ms = milisecond
+  //Mn = minute
+  //S = seconds
+
+  final int _ms; 
+
+
+// construction converter: hour, minute, second
+
+  MyDuration.fromH(int H) : _ms = H * 60 * 60 * 1000;
+  MyDuration.fromMn(int Mn) : _ms = Mn * 60 * 1000;
+  MyDuration.fromS(int S) : _ms = S * 1000;
+
+//OVERIDE CODE provided from Internet
+//converts ms ->S.
+//extracts H and minute by divisions 
+//modulo operator % to get the remaining Mn and S.
 
   @override
   String toString() {
-    int seconds = (_milliseconds / 1000).round();
-    int minutes = (seconds / 60).floor();
-    seconds = seconds % 60;
-    int hours = (minutes / 60).floor();
-    minutes = minutes % 60;
-    return '$hours hours, $minutes minutes, $seconds seconds';
+    int S = (_ms / 1000).round();
+    int Mn = (S / 60).floor();
+    S = S % 60;
+    int H = (Mn / 60).floor();
+    Mn = Mn % 60;
+    return '$H H, $Mn Mn, $S S';
+
   }
+
+//comparison operator
 
   bool operator >(MyDuration other) {
-    return _milliseconds > other._milliseconds;
+
+    return _ms > other._ms;
+
   }
 
+//operation code is Help provided
+
   MyDuration operator +(MyDuration other) {
-    return MyDuration.fromMilliseconds(_milliseconds + other._milliseconds);
+
+    return MyDuration.fromms(_ms + other._ms);
+
   }
 
   MyDuration operator -(MyDuration other) {
-    if (_milliseconds < other._milliseconds) {
-      throw Exception('Cannot subtract greater duration');
+
+    if (_ms < other._ms) {
+
+      throw Exception('Cant subtract greater duration');
     }
-    return MyDuration.fromMilliseconds(_milliseconds - other._milliseconds);
+    return MyDuration.fromms(_ms - other._ms);
+
   }
 
-  static MyDuration fromMilliseconds(int milliseconds) {
-    return MyDuration._(milliseconds);
+  static MyDuration fromms(int ms) {
+
+    return MyDuration._(ms);
+
   }
 
-  MyDuration._(this._milliseconds);
+  MyDuration._(this._ms);
+
+
 }
 
+//main function
 void main() {
-  MyDuration duration1 = MyDuration.fromHours(3); // 3 hours
-  MyDuration duration2 = MyDuration.fromMinutes(45); // 45 minutes
-  print(duration1 + duration2); // 3 hours, 45 minutes, 0 seconds
+
+  MyDuration duration1 = MyDuration.fromH(3); // 3 H
+  MyDuration duration2 = MyDuration.fromMn(45); // 45 Mn
+  print(duration1 + duration2); // 3 H, 45 Mn, 0 S
   print(duration1 > duration2); // true
 
   try {
-    print(duration2 - duration1); // This will throw an exception
+    print(duration2 - duration1); // an exception
+
   } catch (e) {
+
     print(e); 
+
   }
+
 }
