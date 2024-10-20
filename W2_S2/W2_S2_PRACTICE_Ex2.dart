@@ -1,48 +1,71 @@
 
-class BankAccount {
-  int accountId;
-  String accountOwner;
-  double _balance;
+//not_complete code
+
+//bank class
+
+class Bankacc {
+
+  //acc = acc
+  //bal = Balance
+
+  int accId;
+  String accOwner;  
+  double _bal;
 
   // Constructor
-  BankAccount(this.accountId, this.accountOwner, [this._balance = 0]);
+  Bankacc(this.accId, this.accOwner, [this._bal = 0]);
 
-  // Method to get the current balance
+  // Method get balance
+
   double balance() {
-    return _balance;
+    return _bal;
+
   }
 
-  // Method to withdraw money from the account
+  // Mwithrawd method
+
   void withdraw(double amount) {
-    if (amount > _balance) {
-      throw Exception('Insufficient funds');
+    if (amount > _bal) {
+
     }
-    _balance -= amount;
+
+    _bal -= amount;
+
   }
 
-  // Method to credit money to the account
+  // credit method 
+
   void credit(double amount) {
-    _balance += amount;
+
+    _bal += amount;
+
   }
+
 }
 
 class Bank {
-  List<BankAccount> accounts = [];
 
-  // Method to create a new bank account
-  BankAccount createAccount(int accountId, String accountOwner) {
-    // Check if the accountId is unique
-    for (var account in accounts) {
-      if (account.accountId == accountId) {
-        throw Exception('Account ID already exists.');
+  List<Bankacc> accs = [];
+
+  // new bank method
+
+  Bankacc createacc(int accId, String accOwner) {
+
+    // Check if unique acc
+
+    for (var acc in accs) {
+      if (acc.accId == accId) {
+        throw Exception('acc ID already exists.');
+
       }
+      
     }
 
-    // Create a new account 
+    // Create a new acc 
 
-    BankAccount newAccount = BankAccount(accountId, accountOwner);
-    accounts.add(newAccount);
-    return newAccount;
+    Bankacc newacc = Bankacc(accId, accOwner);
+    accs.add(newacc);
+    return newacc;
 
   }
 
