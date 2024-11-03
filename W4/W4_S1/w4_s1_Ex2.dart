@@ -41,7 +41,9 @@ extension ProductDetails on Product {
 
     }
   }
-
+  
+//description
+  
   String get description {
 
     switch (this) {
@@ -53,7 +55,9 @@ extension ProductDetails on Product {
         return 'The best cloud database';
     }
   }
-
+  
+//images
+  
   String get imagePath {
 
     switch (this) {
