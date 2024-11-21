@@ -31,6 +31,7 @@ class _TemperatureAppState extends State<TemperatureApp> {
         ),
       ),
       //Adding  code: route: temperature
+      //to define named routes in the app, routes are used for mappings of string names
       routes: {
         '/temperature': (context) => const Temperature(),
       },
