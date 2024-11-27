@@ -4,7 +4,7 @@ import 'model/quiz.dart';
 
 void main() {
   Question q1 = const Question(
-      title: "What is a Cambodia known for?",
+      title: "What is  Cambodia known for?",
       possibleAnswers: ["Eiffel Tower", "Angkor wat", 'Pyramid'],
       goodAnswer: 'Angkor wat');
   Question q2 = const Question(
