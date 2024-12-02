@@ -1,6 +1,11 @@
 import 'quiz.dart'; // Import the correct Question and Quiz classes
 
-//Missing Answer class (). Added later...
+//Missing Answer class (). 
+//class Answer{
+//final Question question;
+//final String response;
+//....
+//}
 
 class Submission {
   final Map<Question, String> answers = {}; // Store user answers for each Question
