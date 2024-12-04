@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-
 import '../../models/expense.dart';
 import 'expenses_form.dart';
 import 'expenses_list.dart';
 
+/// the Main screen to display expense lists
 class Expenses extends StatefulWidget {
-  const Expenses({super.key});
-
+  const Expenses({Key? key}) : super(key: key);
   @override
-  State<Expenses> createState() {
-    return _ExpensesState();
-  }
+  State<Expenses> createState() => _ExpensesState();
 }
 
 class _ExpensesState extends State<Expenses> {
+  
+  /// List to store all registered expenses
+  
   final List<Expense> _registeredExpenses = [
     Expense(
       title: 'Flutter Course',
@@ -28,44 +28,50 @@ class _ExpensesState extends State<Expenses> {
       category: Category.leisure,
     ),
   ];
-  void onUndo(Expense expense){
+
+  /// to remove expense_an_undo_operation
+  
+  void _undoExpense(Expense expense) {
     setState(() {
       _registeredExpenses.add(expense);
     });
   }
-  void onExpenseRemoved(Expense expense) {
 
+  /// to remove expense from the list
+  
+  void _removeExpense(Expense expense) {
     setState(() {
       _registeredExpenses.remove(expense);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-              'Expense deleted',
-              style:
-              TextStyle(
-                  color: Colors.white,
-                  decoration: TextDecoration.none),
-            ),
-            duration: const Duration(seconds: 3),
-            action: SnackBarAction(label: 'Undo',textColor: Colors.blue, onPressed:()=> onUndo(expense)),
-          )
-      );
     });
+    
+///NOTE: New code line
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Expense deleted'),
+        duration: const Duration(seconds: 3),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () => _undoExpense(expense),
+        ),
+      ),
+    );
   }
 
-  void onExpenseCreated(Expense newExpense) {
+  /// adding new expense to List
+  
+  void _addExpense(Expense newExpense) {
     setState(() {
       _registeredExpenses.add(newExpense);
     });
   }
 
-
-  void onAddPressed() {
+  /// to create a new expense
+  
+  void _showAddExpenseForm() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (ctx) => ExpenseForm(onCreated: onExpenseCreated,),
+      builder: (_) => ExpenseForm(onCreated: _addExpense),
     );
   }
 
@@ -74,16 +80,20 @@ class _ExpensesState extends State<Expenses> {
     return Scaffold(
       backgroundColor: Colors.blue[100],
       appBar: AppBar(
+        title: const Text('Expenses App'), 
+        backgroundColor: Colors.blue[700],
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: onAddPressed,
-          )
+            icon: const Icon(Icons.add), 
+            onPressed: _showAddExpenseForm,
+          ),
         ],
-        backgroundColor: Colors.blue[700],
-        title: const Text('Ronan-The-Best Expenses App'),
       ),
-      body: ExpensesList(expenses: _registeredExpenses, onExpenseRemoved: onExpenseRemoved,),
+      
+      body: ExpensesList(
+        expenses: _registeredExpenses, //to pass List Expense
+        onExpenseRemoved: _removeExpense, // to Callback 
+      ),
     );
   }
 }
