@@ -39,8 +39,8 @@ class _ExpenseFormState extends State<ExpenseForm> {
     Expense expense = Expense(
         title: title,
         amount: amount,
-        date: DateTime.now(),     //  TODO :  For now it s a fake data
-        category: Category.food); //  TODO :  For now it s a fake data
+        date: DateTime.now(),     
+        category: Category.food); 
 
     // 3- Ask the parent to add the expense
     widget.onCreated(expense);
