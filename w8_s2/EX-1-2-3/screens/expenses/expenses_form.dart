@@ -3,9 +3,13 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:flutter/services.dart';
 import '../../models/expense.dart';
 
-class ExpenseForm extends StatefulWidget {
-  const ExpenseForm({super.key, required this.onCreated});
+///using state class
+///to add new expense
 
+class ExpenseForm extends StatefulWidget {
+  const ExpenseForm({Key? key, required this.onCreated}) : super(key: key);
+
+  /// Callback
   final Function(Expense) onCreated;
 
   @override
@@ -14,134 +18,132 @@ class ExpenseForm extends StatefulWidget {
 
 class _ExpenseFormState extends State<ExpenseForm> {
   final _titleController = TextEditingController();
-  final _valueController = TextEditingController();
-  String? dropDownValue;
-  Category? allCategory = Category.travel;
-  DateTime? datePick = DateTime.now();
-  List<String> allCategoryList = [
+  final _amountController = TextEditingController();
+
+  String? _selectedCategory; /// dropdown value
+  DateTime? _selectedDate = DateTime.now(); ///date
+
+  /// List of category names
+  final List<String> _categories = [
     'LEISURE',
     'FOOD',
     'TRAVEL',
     'WORK',
   ];
 
-  String get title => _titleController.text;
-
   @override
   void dispose() {
     _titleController.dispose();
-    _valueController.dispose();
+    _amountController.dispose();
     super.dispose();
   }
 
-  void onCancel() {
-    // Close modal
-    Navigator.pop(context);
-  }
+  /// to open date_picker to select a date
 
-  void onAddCategory(String? value){
-    setState(() {
-      dropDownValue = value;
-    });
-  }
-  void showDate(){
-    DatePicker.showDatePicker(context,
-        showTitleActions: true,
-        minTime: DateTime(1890,12,30),
-        maxTime: DateTime.now(),onConfirm: (date){
-          setState(() {
-            datePick = date;
-          });
-
-        }, currentTime: DateTime.now(),locale: LocaleType.en
+  void _selectDate() {
+    DatePicker.showDatePicker(
+      context,
+      showTitleActions: true,
+      minTime: DateTime(2000, 1, 1), ///to select minimum_date
+      maxTime: DateTime.now(), /// to select maximum-date
+      onConfirm: (date) {
+        setState(() {
+          _selectedDate = date;
+        });
+      },
     );
   }
 
-  void onAdd() {
-  
-    String title = _titleController.text;
-    double amount = double.parse(_valueController.text);
-    if(dropDownValue == 'LEISURE'){
-      allCategory = Category.leisure;
-    } else if(dropDownValue == 'FOOD'){
-      allCategory = Category.food;
-    } else if(dropDownValue == 'WORK'){
-      allCategory = Category.work;
-    } else {
-      allCategory = Category.travel;
+  ///form submission
+
+  void _submitForm() {
+    if (_titleController.text.isEmpty || _amountController.text.isEmpty || _selectedCategory == null) {
+      return;
     }
-  
-    Expense expense = Expense(
-        title: title,
-        amount: amount,
-        date: datePick!,
-        category: allCategory!);
+
+    final amount = double.tryParse(_amountController.text);
+    if (amount == null) return;
+///// Validation:to make sure thath reaquired of(title, amount, category) are add
+
+    //  category name CONVERTER to enum value
+    final category = Category.values.firstWhere(
+          (cat) => cat.name.toUpperCase() == _selectedCategory,
+    );
+
+    // Create a new expense instance
+    final expense = Expense(
+      title: _titleController.text,
+      amount: amount,
+      date: _selectedDate!,
+      category: category,
+    );
+
     widget.onCreated(expense);
-    Navigator.pop(context);
+    Navigator.pop(context);  ///To close the Form
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+
           TextField(
             controller: _titleController,
             maxLength: 50,
-            decoration: const InputDecoration(
-              label: Text('Title'),
-            ),
+            decoration: const InputDecoration(labelText: 'Title'),
           ),
+
+
           TextField(
+            controller: _amountController,
             keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            controller: _valueController,
-            maxLength: 50,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             decoration: const InputDecoration(
-              prefix: Text('\$ '),
-              label: Text('Amount'),
+              labelText: 'Amount',
+              prefixText: '\$ ',
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  const Text('Pick the Category',
-                             style: TextStyle(color: Colors.black,decoration: TextDecoration.none)),
-                  DropdownButton(
-                      value: dropDownValue,
-                      items: allCategoryList.map((value){
-                        return DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList()
-                      , onChanged: onAddCategory),
-                ],
-              ),
 
-              TextButton(onPressed: showDate,
-                  child: Text('$datePick',
-                              style: const TextStyle(color: Colors.blue,decoration: TextDecoration.none),))
-
-            ],
+          // to drop_down category selected
+          DropdownButton<String>(
+            value: _selectedCategory,
+            hint: const Text('Select Category'),
+            items: _categories.map((category) {
+              return DropdownMenuItem(value: category, child: Text(category));
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                _selectedCategory = value;
+              });
+            },
           ),
 
+          // Button to open date_picker
+          TextButton(
+            onPressed: _selectDate,
+            child: Text(
+              _selectedDate != null ? _selectedDate.toString() : 'Select Date',
+            ),
+          ),
+
+          // Action buttons: Cancel & Add
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ElevatedButton(onPressed: onCancel, child: const Text('Cancel')),
-              const SizedBox(
-                width: 20,
+              ElevatedButton(
+                onPressed: Navigator.of(context).pop,
+                child: const Text('Cancel'),
               ),
-              ElevatedButton(onPressed: onAdd, child: const Text('Create')),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: _submitForm,
+                child: const Text('Add'),
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
