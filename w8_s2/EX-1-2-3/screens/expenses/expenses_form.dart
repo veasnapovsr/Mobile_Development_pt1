@@ -58,7 +58,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
   }
 
   void onAdd() {
-    // 1- Get the values from inputs
+  
     String title = _titleController.text;
     double amount = double.parse(_valueController.text);
     if(dropDownValue == 'LEISURE'){
@@ -70,17 +70,13 @@ class _ExpenseFormState extends State<ExpenseForm> {
     } else {
       allCategory = Category.travel;
     }
-    // 2- Create the expense
+  
     Expense expense = Expense(
         title: title,
         amount: amount,
         date: datePick!,
         category: allCategory!);
-
-    // 3- Ask the parent to add the expense
     widget.onCreated(expense);
-
-    // 4- Close modal
     Navigator.pop(context);
   }
 
@@ -115,7 +111,8 @@ class _ExpenseFormState extends State<ExpenseForm> {
             children: [
               Column(
                 children: [
-                  const Text('Pick the Category',style: TextStyle(color: Colors.black,decoration: TextDecoration.none)),
+                  const Text('Pick the Category',
+                             style: TextStyle(color: Colors.black,decoration: TextDecoration.none)),
                   DropdownButton(
                       value: dropDownValue,
                       items: allCategoryList.map((value){
@@ -129,7 +126,8 @@ class _ExpenseFormState extends State<ExpenseForm> {
               ),
 
               TextButton(onPressed: showDate,
-                  child: Text('$datePick',style: const TextStyle(color: Colors.blue,decoration: TextDecoration.none),))
+                  child: Text('$datePick',
+                              style: const TextStyle(color: Colors.blue,decoration: TextDecoration.none),))
 
             ],
           ),
