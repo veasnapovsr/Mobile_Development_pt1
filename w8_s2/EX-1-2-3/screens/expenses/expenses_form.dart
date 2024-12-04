@@ -31,11 +31,10 @@ class _ExpenseFormState extends State<ExpenseForm> {
   }
 
   void onAdd() {
-    // 1- Get the values from inputs
+    
     String title = _titleController.text;
     double amount = double.parse(_valueController.text);
 
-    // 2- Create the expense
     Expense expense = Expense(
         title: title,
         amount: amount,
