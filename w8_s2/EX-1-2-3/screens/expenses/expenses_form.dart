@@ -41,10 +41,8 @@ class _ExpenseFormState extends State<ExpenseForm> {
         date: DateTime.now(),     
         category: Category.food); 
 
-    // 3- Ask the parent to add the expense
     widget.onCreated(expense);
-
-    // 4- Close modal
+    
     Navigator.pop(context);
   }
 
