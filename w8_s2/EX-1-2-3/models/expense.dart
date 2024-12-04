@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-
-
-
 final uuid = Uuid();
-
 
 enum Category {
   food(Icons.lunch_dining),
